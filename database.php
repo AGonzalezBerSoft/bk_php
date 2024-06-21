@@ -61,7 +61,7 @@ for ($i=0; $i < $_ENV['COUNT_DATABASES']; $i++) {
     if (isset($_ENV["DB_PORT_$i"])) {
         $tmp->dbPort = $_ENV["DB_PORT_$i"];
     }
-    if (isset($_ENV["AWS_BUCKET_$i"]) && isset($_ENV["DB_USER_$i"]) && isset($_ENV["DB_PASSWORD_$i"]) && isset($_ENV["DB_NAME_$i"]) && isset($_ENV["DB_NAME_BACKUP_$i"])) {
+    if (isset($_ENV["DB_AWS_BUCKET_$i"]) && isset($_ENV["DB_USER_$i"]) && isset($_ENV["DB_PASSWORD_$i"]) && isset($_ENV["DB_NAME_$i"]) && isset($_ENV["DB_NAME_BACKUP_$i"])) {
         try {
             $tmp->dbUsername = $_ENV["DB_USER_$i"];
             $tmp->dbPassword = $_ENV["DB_PASSWORD_$i"];
@@ -71,7 +71,7 @@ for ($i=0; $i < $_ENV['COUNT_DATABASES']; $i++) {
             if($backup->success) {
                 $nameLoad = $backup->file; 
                 $tmp = new s3();
-                $tmp->setBucket($_ENV["AWS_BUCKET_$i"]);
+                $tmp->setBucket($_ENV["DB_AWS_BUCKET_$i"]);
                 $tmp->setFilePath(__DIR__.'/'.$nameLoad);
                 $tmp->setKeyName(date("Y-m-d")."_".$nameLoad);
                 if($tmp->upload()) {

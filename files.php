@@ -28,15 +28,15 @@ class files {
 
 
 for ($i=0; $i < $_ENV['COUNT_FILES']; $i++) { 
-    if (isset($_ENV["AWS_BUCKET_$i"]) && isset($_ENV["PATH_BACKUP_$i"]) && isset($_ENV["PATH_NAME_BACKUP_$i"])) {
+    if (isset($_ENV["FILE_AWS_BUCKET_$i"]) && isset($_ENV["FILE_BACKUP_$i"]) && isset($_ENV["FILE_NAME_BACKUP_$i"])) {
         try {
             $tmp = new files();
-            $tmp->path = $_ENV["PATH_BACKUP_$i"];
-            $tmp->file = $_ENV["PATH_NAME_BACKUP_$i"];
+            $tmp->path = $_ENV["FILE_BACKUP_$i"];
+            $tmp->file = $_ENV["FILE_NAME_BACKUP_$i"];
             $make = $tmp->makeBackup();
             if ($make->success) {
                 $tmp = new s3();
-                $tmp->setBucket($_ENV["AWS_BUCKET_$i"]);
+                $tmp->setBucket($_ENV["FILE_AWS_BUCKET_$i"]);
                 $tmp->setFilePath(__DIR__.'/'.$make->file);
                 $tmp->setKeyName(date("Y-m-d")."_".$make->file);
                 if($tmp->upload()) {
