@@ -26,28 +26,16 @@ class database {
             if (file_exists("$file.gz")) {
                 unlink("$file.gz");
             }
-            if($this->compress($file, "$file.gz")) {
-                unlink($file);
+            $command = "gzip --force $file";
+            exec($command, $output, $return_var);
+            if ($return_var !== 0) {
+                $response->msg = "There was a problem backing up the database.";
+            } else {
                 $response->success = true;
                 $response->file = "$file.gz";
-            };
+            }
         }
         return $response;
-    }
-    private function compress($file, $gzfile) {
-        try {
-            $fp = fopen($file, 'rb');
-            $data = fread($fp, filesize($file));
-            fclose($fp);
-    
-            $zp = gzopen($gzfile, 'w9');
-            gzwrite($zp, $data);
-            gzclose($zp);
-            return true;
-        } catch (\Throwable $th) {
-            print_r($th);
-            return false;
-        }
     }
 }
 
