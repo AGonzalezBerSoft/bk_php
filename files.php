@@ -4,7 +4,11 @@ require 'vendor/autoload.php';
 require __DIR__.'/s3.php';
 
 use Dotenv\Dotenv;
-$dotenv = Dotenv::createImmutable(__DIR__);
+if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
+    $dotenv = Dotenv::createImmutable(__DIR__);
+} else {
+    $dotenv = new Dotenv(__DIR__);
+}
 $dotenv->load();
 
 class files {
@@ -15,7 +19,7 @@ class files {
         $response->success = false;
         $file = "$this->file.tar.gz";
         $response->file = $file;
-        $command = "tar -czvf $file --exclude='.git' --exclude='logs' --exclude='vendor' -C $this->path .";
+        $command = "tar -czvf $file --exclude='.git' --exclude='logs' --exclude='vendor' --exclude='graduados' -C $this->path .";
         exec($command, $output, $return_var);
         if ($return_var !== 0) {
             $response->msg = "There was a problem backing up the database.";

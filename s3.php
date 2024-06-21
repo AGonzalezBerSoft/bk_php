@@ -29,13 +29,13 @@ class s3 {
             return false;
         }
     }
-    public function setBucket(String $bucket) {
+    public function setBucket($bucket) {
         $this->bucket = $bucket;
     }
-    public function setFilePath(String $filePath) {
+    public function setFilePath($filePath) {
         $this->filePath = $filePath;
     }
-    public function setKeyName(String $keyName) {
+    public function setKeyName($keyName) {
         $this->keyName = $keyName;
     }
 }
