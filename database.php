@@ -18,7 +18,7 @@ class database {
         $response = new stdClass();
         $response->success = false;
         $file = "/tmp/$this->backupFile.sql";
-        $command = "mysqldump --opt --host=$this->dbHost --port=$this->dbPort --user=$this->dbUsername --password=$this->dbPassword $this->dbName > $file";
+        $command = "mysqldump --opt --host=$this->dbHost --port=$this->dbPort --user=$this->dbUsername --password='$this->dbPassword' $this->dbName > $file";
         exec($command, $output, $return_var);
         if ($return_var !== 0) {
             $response->msg = "There was a problem backing up the database.";
