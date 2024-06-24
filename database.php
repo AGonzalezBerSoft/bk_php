@@ -3,11 +3,7 @@ require 'vendor/autoload.php';
 require __DIR__.'/s3.php';
 use Dotenv\Dotenv;
 
-if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
-    $dotenv = Dotenv::createImmutable(__DIR__);
-} else {
-    $dotenv = new Dotenv(__DIR__);
-}
+$dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
 class database {
