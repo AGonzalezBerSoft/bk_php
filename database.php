@@ -21,7 +21,7 @@ class database {
     public function makeBackup() {
         $response = new stdClass();
         $response->success = false;
-        $file = $this->backupFile.".sql";
+        $file = "/tmp/$this->backupFile.sql";
         $command = "mysqldump --opt --host=$this->dbHost --port=$this->dbPort --user=$this->dbUsername --password=$this->dbPassword $this->dbName > $file";
         exec($command, $output, $return_var);
         if ($return_var !== 0) {
@@ -64,10 +64,10 @@ for ($i=0; $i < $_ENV['COUNT_DATABASES']; $i++) {
                 $nameLoad = $backup->file; 
                 $tmp = new s3();
                 $tmp->setBucket($_ENV["DB_AWS_BUCKET_$i"]);
-                $tmp->setFilePath(__DIR__.'/'.$nameLoad);
-                $tmp->setKeyName(date("Y-m-d")."_".$nameLoad);
+                $tmp->setFilePath($backup->file);
+                $tmp->setKeyName(date("Y-m-d")."_".basename($backup->file));
                 if($tmp->upload()) {
-                    unlink(__DIR__.'/'.$nameLoad);
+                    unlink($backup->file);
                 }
             }
         } catch (\Throwable $th) {
