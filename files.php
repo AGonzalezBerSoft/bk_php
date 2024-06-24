@@ -13,9 +13,8 @@ class files {
     public function makeBackup() {
         $response = new stdClass();
         $response->success = false;
-        $file = "$this->file.tar.gz";
-        $response->file = $file;
-        $command = "tar -czvf $file --exclude='.git' --exclude='logs' --exclude='vendor' -C $this->path .";
+        $response->file = "/tmp/$this->file.tar.gz";
+        $command = "tar -czvf $response->file --exclude='.git' --exclude='logs' --exclude='vendor' -C $this->path .";
         exec($command, $output, $return_var);
         if ($return_var !== 0) {
             $response->msg = "There was a problem backing up the database.";
@@ -37,10 +36,10 @@ for ($i=0; $i < $_ENV['COUNT_FILES']; $i++) {
             if ($make->success) {
                 $tmp = new s3();
                 $tmp->setBucket($_ENV["FILE_AWS_BUCKET_$i"]);
-                $tmp->setFilePath(__DIR__.'/'.$make->file);
-                $tmp->setKeyName(date("Y-m-d")."_".$make->file);
+                $tmp->setFilePath($make->file);
+                $tmp->setKeyName(date("Y-m-d")."_".basename($make->file));
                 if($tmp->upload()) {
-                    unlink(__DIR__.'/'.$make->file);
+                    unlink($make->file);
                 }
             }
         } catch (Exception $e) {
