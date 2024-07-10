@@ -1,5 +1,6 @@
 <?php
-
+ini_set("memory_limit", "2048M");
+set_time_limit(360);
 require 'vendor/autoload.php';
 require __DIR__.'/s3.php';
 
