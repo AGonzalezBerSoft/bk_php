@@ -61,7 +61,12 @@ for ($i=0; $i < $_ENV['COUNT_DATABASES']; $i++) {
                 $tmp = new s3();
                 $tmp->setBucket($_ENV["DB_AWS_BUCKET_$i"]);
                 $tmp->setFilePath($backup->file);
-                $tmp->setKeyName(date("Y-m-d")."_".basename($backup->file));
+                $random = substr(str_shuffle('abcdefghijklmnopqrstuvwxyz'), 0, 5);
+                if (date('j') == 1) {
+                    $tmp->setKeyName("monthly_".date("Y-m-d")."_".$random."_".basename($backup->file));
+                } else {
+                    $tmp->setKeyName("daily_".date("Y-m-d")."_".$random."_".basename($backup->file));
+                }
                 if($tmp->upload()) {
                     if(copy($backup->file, $file_cp)) {
                         unlink($backup->file);

@@ -37,7 +37,12 @@ for ($i=0; $i < $_ENV['COUNT_FILES']; $i++) {
                 $tmp = new s3();
                 $tmp->setBucket($_ENV["FILE_AWS_BUCKET_$i"]);
                 $tmp->setFilePath($make->file);
-                $tmp->setKeyName(date("Y-m-d")."_".basename($make->file));
+                $random = substr(str_shuffle('abcdefghijklmnopqrstuvwxyz'), 0, 5);
+                if (in_array(date('j'),[1,2,3])) {
+                    $tmp->setKeyName("monthly_".date("Y-m-d")."_".$random."_".basename($make->file));
+                } else {
+                    $tmp->setKeyName("daily_".date("Y-m-d")."_".$random."_".basename($make->file));
+                }
                 if($tmp->upload()) {
                     unlink($make->file);
                 }
