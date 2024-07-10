@@ -1,11 +1,11 @@
 ## Linux
-Definir las variables en bash
+copy .env.example -> .env
 
-export AWS_ACCESS_KEY_ID=''
-export AWS_SECRET_ACCESS_KEY=''
+Configurar el numero de backup de base de datos, y de archivos indicando el path y parametros.
+Programas los crontab 
 
-vi ~/.bash_profile
-source ~/.bash_profile
+TZ=America/Bogota
+05 00 * * * php ~/backup/database.php
+00 03 */3 * * php ~/backup/files.php
 
 ## Windows
-Definir las variables en variables de usuario

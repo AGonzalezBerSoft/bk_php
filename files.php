@@ -47,9 +47,13 @@ for ($i=0; $i < $_ENV['COUNT_FILES']; $i++) {
                     unlink($make->file);
                 }
             }
-        } catch (Exception $e) {
-            echo 'Error: ' . $e->getMessage();
+        } catch (\Throwable $th) {
+            $tmp = new MailSMTPTransactional();
+            $tmp->send([['email'=> 'soporte@bersoft.co', 'name' => 'Soporte BerSoft']], "Error backup AWS - ".$_ENV["FILE_AWS_BUCKET_$i"], $th->getMessage());
         }
+    } else {
+        $tmp = new MailSMTPTransactional();
+        $tmp->send([['email'=> 'soporte@bersoft.co', 'name' => 'Soporte BerSoft']], "Error backup AWS - ".$_ENV["FILE_AWS_BUCKET_$i"], "Error en parametros");
     }
 }
 ?>

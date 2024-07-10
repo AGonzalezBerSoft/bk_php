@@ -72,10 +72,15 @@ for ($i=0; $i < $_ENV['COUNT_DATABASES']; $i++) {
                         unlink($backup->file);
                     }
                 }
+            } else {
+                throw new Exception($backup->msg, 1);
             }
         } catch (\Throwable $th) {
-            print_r($th->getMessage());
+            $tmp = new MailSMTPTransactional();
+            $tmp->send([['email'=> 'soporte@bersoft.co', 'name' => 'Soporte BerSoft']], "Error backup AWS - ".$_ENV["DB_AWS_BUCKET_$i"], $th->getMessage());
         }
-
+    } else {
+        $tmp = new MailSMTPTransactional();
+        $tmp->send([['email'=> 'soporte@bersoft.co', 'name' => 'Soporte BerSoft']], "Error backup AWS - ".$_ENV["DB_AWS_BUCKET_$i"], "Error en parametros");
     }
 }
