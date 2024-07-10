@@ -47,6 +47,8 @@ for ($i=0; $i < $_ENV['COUNT_FILES']; $i++) {
                 if($tmp->upload()) {
                     unlink($make->file);
                 }
+            } else {
+                throw new Exception($make->msg, 1);
             }
         } catch (\Throwable $th) {
             $tmp = new MailSMTPTransactional();

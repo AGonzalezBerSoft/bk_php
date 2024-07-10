@@ -60,7 +60,7 @@ class MailSMTPTransactional
         $response->data = '';
         $response->errors = [];
         try {
-            for ($provider=1; $provider <= 3; $provider++) { 
+            for ($provider=0; $provider <= 2; $provider++) { 
                 $mail = $this->envioEmail($provider);
                 if($mail->success) {
                     $mail = $mail->mail;
