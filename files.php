@@ -13,8 +13,8 @@ class files {
     public function makeBackup() {
         $response = new stdClass();
         $response->success = false;
-        $response->file = "/tmp/$this->file.tar.gz";
-        $command = "tar -czvf $response->file --exclude='.git' --exclude='logs' --exclude='vendor' -C $this->path .";
+        $response->file = __DIR__."/data/$this->file.tar.gz";
+        $command = "tar -czvf $response->file --exclude='.git' --exclude='logs' --exclude='vendor'  -C $this->path .";
         exec($command, $output, $return_var);
         if ($return_var !== 0) {
             $response->msg = "There was a problem backing up the database.";

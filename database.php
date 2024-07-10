@@ -17,7 +17,7 @@ class database {
     public function makeBackup() {
         $response = new stdClass();
         $response->success = false;
-        $file = "/tmp/$this->backupFile.sql";
+        $file = __DIR__."/data/$this->backupFile.sql";
         $command = "mysqldump --opt --host=$this->dbHost --port=$this->dbPort --user=$this->dbUsername --password='$this->dbPassword' $this->dbName > $file";
         exec($command, $output, $return_var);
         if ($return_var !== 0) {
@@ -49,6 +49,9 @@ for ($i=0; $i < $_ENV['COUNT_DATABASES']; $i++) {
     }
     if (isset($_ENV["DB_AWS_BUCKET_$i"]) && isset($_ENV["DB_USER_$i"]) && isset($_ENV["DB_PASSWORD_$i"]) && isset($_ENV["DB_NAME_$i"]) && isset($_ENV["DB_NAME_BACKUP_$i"])) {
         try {
+            $file_cp = $_ENV["DB_NAME_BACKUP_CP_$i"];
+            $file_cp = __DIR__."/data/$file_cp.sql.gz";
+            unlink($file_cp);
             $tmp->dbUsername = $_ENV["DB_USER_$i"];
             $tmp->dbPassword = $_ENV["DB_PASSWORD_$i"];
             $tmp->dbName = $_ENV["DB_NAME_$i"];
@@ -60,7 +63,9 @@ for ($i=0; $i < $_ENV['COUNT_DATABASES']; $i++) {
                 $tmp->setFilePath($backup->file);
                 $tmp->setKeyName(date("Y-m-d")."_".basename($backup->file));
                 if($tmp->upload()) {
-                    unlink($backup->file);
+                    if(copy($backup->file, $file_cp)) {
+                        unlink($backup->file);
+                    }
                 }
             }
         } catch (\Throwable $th) {
