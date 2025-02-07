@@ -1,6 +1,6 @@
 <?php
 ini_set("memory_limit", "2048M");
-set_time_limit(360);
+set_time_limit(0);
 require 'vendor/autoload.php';
 require __DIR__.'/s3.php';
 
@@ -18,7 +18,7 @@ class files {
         $command = "tar -czvf $response->file --exclude='.git' --exclude='logs' --exclude='vendor'  -C $this->path .";
         exec($command, $output, $return_var);
         if ($return_var !== 0) {
-            $response->msg = "There was a problem backing up the database.";
+            $response->msg = "There was a problem backing up the files (".json_encode($output).")";
         } else {
             $response->success = true;
         }

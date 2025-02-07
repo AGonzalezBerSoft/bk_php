@@ -24,7 +24,8 @@ class s3 {
                 'credentials' => [
                     'key'    => $_ENV['AWS_ACCESS_KEY_ID'],
                     'secret' => $_ENV['AWS_SECRET_ACCESS_KEY'],
-                ]
+                ],
+                'debug' => true
             ]);
 
             $result = $s3Client->putObject([
